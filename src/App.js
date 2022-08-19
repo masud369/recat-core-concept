@@ -1,93 +1,85 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
 
-  const person = {
-    name: "Mahfuz",
-    profession: "singer"
-  }
-  const person2 = {
-    name: "Eva Rahman",
-    upama: "Kokil konthi"
-  }
-  const style = {
-    backgroundColor: "yellow",
-    color: "blue"
-  }
-
-  const productsInfo = [
-    {name:"photoshop",price:"$99.99",buy:"Buy now"},{name:"photoshop2",price:"$89.99",buy:"Buy now"}
-  ]
-
-  const clbrtyname = {naok:'Manna',naika:'Popi'}
+ const nayoks = ["Razzak","Joshim","Iliees k","Manna","Salmansha","Sakib"];
+  const productData = [
+    {name:"photoshop",price:"$125",btn:"buynow"},
+    {name:"photoshop2",price:"$225",btn:"buynow"},
+    {name:"photoshop3",price:"$325",btn:"buynow"}
+    
+  ];
   return (
     
     <div className="App">
       <header className="App-header">
 
-        <p>This is first document of recat js</p>
-
-
-      {/* <Product title={productsInfo[0].name} price={productsInfo[0].price} buy={productsInfo[0].buy}></Product> */}
-      
-      <Product product={productsInfo[1]} ></Product>
-
-        <h2 className='' style={style}>Person name is {person.name + " and prefession is " + person.profession}</h2>
-        <h4 style={{ color: "yellow", backgroundColor: "blue" }}>Person name is {person2.name + " and Upama is " + person2.upama}</h4>
-        <PersonInfo></PersonInfo>
-        <PersonInfo></PersonInfo>
-        <PropsCheck Nyokname="Joshim" Nykaname="Shabana"></PropsCheck>
-        <PropsCheck naok={clbrtyname.naok} nyka={clbrtyname.naika}></PropsCheck>
+      <ul> 
+        {nayoks.map(nayok=> <li>{nayok}</li>)}
+        {productData.map(adobe=><li>{adobe.name}</li>)}
+        {productData.map((product)=><Product info={product}></Product>)}
+        <Counter></Counter>
+      </ul>
+       <Fetching></Fetching>
+      <p>hello</p>
+        
       </header>
     </div>
 
   )
 }
 
-//making product
- function Product(props){
-  const style = {
-    backgroundColor:"gray",
-    color:"white",
-    width:"400px",
-    height:"400px",
-    margin:"10px",
-  }
-  const {name,price,buy}= props.product;
-  console.log(props);
-  return (<div style={style}>
-    <h2>{name}</h2>
-    <h4>{price}</h4>
-    <h2><a href="">{buy}</a></h2>
+//using fetch 
+ function Fetching(){
+  const [users,setUsers]=useState([]);
+  useEffect(()=>{
+    console.log("it works")
+    fetch("https://jsonplaceholder.typicode.com/users")
+    .then(res=>res.json())
+    .then((data)=>{return console.log(data), setUsers(data)})
+  },[]);
+  
+  
+  return (<div>
+      {
+        users.map((user)=>{return (<div><li>{user.username}</li>,<li>{user.email}</li></div>)})
+      }
   </div>);
  }
 
 
+//use of state
+function Counter(){
+  const [count,setCount] = useState(101); 
+const countIncrease =()=>setCount(count+1);
+const countDicrease =()=>setCount(count-1);
 
-//using props
-function PropsCheck(props){
-  return (
-  <div><h2>Nayok Name is:{" "+ props.naok}</h2>
-  <h4>Nayka Name is: {" "+ props.nyka}</h4> </div>
-  );
+
+  return (<div>
+    <h2>Count:{ " "+count}</h2>
+    <button onClick={countIncrease}>increment</button>
+    <button onMouseMove={countDicrease}>dicrement</button>
+  </div>);
 }
 
 
-
-const infoStyle = {
-  color:"red",
-  backgroundColor:"green"
+function Product(props){
+const style = {
+  backgroundColor:"gray",
+  color:"black",
+  width:"400px",
+  height:"250px",
+  marginTop:"10px"
 }
+const {name,price,btn} = props.info;
+  return (<div style={style}>
+    <h2>{name}</h2>
+    <h4>{price}</h4>
+    <p>{btn}</p>
+  </div>);
+} 
 
-function PersonInfo() {
-  return (
-    <div style={{color:"red",backgroundColor:"green",margin:"10px",padding:"10px"}} >
-      <h2>Shakib al hasan</h2>
-      <h4>No 1 all rounder in the world</h4>
-    </div>
-  );
-}
 
 export default App;
